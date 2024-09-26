@@ -5,6 +5,7 @@ Version: 0.10.1
 Authors@R: c(person("Lee", "McDaniel", role = c("aut", "cre"),email = "lmcda4@lsuhsc.edu"),
 			person("Nick", "Henderson", role = "aut"),
 			person("Melanie", "Prague", role = "ctb",comment = "Suggested code to fix weighting"))
+      person("D. Erik", "Boonstra", role = "ctb", comment = "Creating IC functions")
 Date: 2018-05-21
 Author: Lee McDaniel [aut, cre],
   Nick Henderson [aut],
@@ -24,3 +25,6 @@ NeedsCompilation: no
 Packaged: 2018-06-18 15:09:05 UTC; lmcda4
 Repository: CRAN
 Date/Publication: 2018-06-18 15:49:55 UTC
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
