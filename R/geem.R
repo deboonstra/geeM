@@ -504,9 +504,6 @@ geem <- function(formula, id, waves=NULL, data = parent.frame(),
   results$converged <- converged
   results$naiv.var <- solve(beta.list$hess)  ## call model-based
   results$var <- sandvar.list$sandvar
-  # Adding beta and phi to outputted call object
-  call$beta <- results$beta
-  call$phi <- results$phi
   results$call <- call
   results$corr <- cor.vec[cor.match]
   results$clusz <- len
