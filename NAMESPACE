@@ -1,6 +1,9 @@
 export(geem)
+export(cic)
+export(vic)
+export(mcic)
 import(Matrix)
-importFrom("methods", "as")
+importFrom("methods", "as", "is")
 importFrom("stats", "family", "gaussian", "median", 
 		"model.frame", "model.matrix", "model.offset",
 		"model.response", "na.pass", "pnorm", "terms")
