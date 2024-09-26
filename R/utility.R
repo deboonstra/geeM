@@ -160,3 +160,10 @@ fillMatList <- function(real.sizes){
 model.matrix.geem <- function(object, ...){
   return(model.matrix(object$formula, data=model.frame(object)))
 }
+
+# matrix inversion function
+invert <- if ("MASS" %in% loadedNamespaces()) {
+  MASS::ginv
+} else {
+  solve
+}
