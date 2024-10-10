@@ -5,7 +5,8 @@
 #' @param object An object of class \code{"geem"} representing the fit.
 #' @param type How mCIC is calculated by using either the model-based covariance
 #' matrix produced by the "unstructured" working correlation structure or the
-#' "robust" covariance matrix produced by the working correlation structure.
+#' "model-based" covariance matrix produced by the working correlation
+#' structure.
 #' @param tol A numeric value specifying the tolerance when calculating the
 #' inverse of the model-based covariance matrix.
 #' Default is \code{.Machine$double.eps}.
@@ -41,13 +42,14 @@ mcic <- function(
   if (!(class(tol) %in% c("numeric", "integer"))) {
     stop("tol must be a numeric or an integer value")
   }
-  if (!(type %in% c("unstructured", "robust"))) {
+  if (!(type %in% c("unstructured", "model-based"))) {
     stop("type must be unstructured or type")
   }
   if (!is.environment(envir)) {
     stop("envir must be an environment object")
   }
 
+  # Obtaining the referent covariance matrix ####
   if (type == "unstructured") {
     # Pulling modeling call to re-fit models ####
     model_call <- object$call
@@ -79,36 +81,20 @@ mcic <- function(
       )
     }
 
-    # Getting covariance matrices ####
-
-    ## Inverse of model-based covariance under unstructured ####
-    mb_unstructured <- invert(as.matrix(model_unstructured$naiv.var), tol = tol)
-
-    ## Model-based covariance given working correlation structure ####
-    mb_object <- as.matrix(object$naiv.var)
-
-    ## Checking diagonals ####
-    ## Error if the covariance matrices are non-p.d.
-    if (any(c(diag(mb_unstructured) < 0, diag(mb_object) < 0))) {
-      stop("Non-positive definite covariance matrices present.")
-    }
-
-    # Calculating mCIC ####
-    measure <- sum(diag(x = crossprod(x = mb_unstructured, y = mb_object)))
-  } else if (type == "robust") {
-    # Obtaining covariance matrices ####
-
-    ## Inverse of model-based covariance under working correlation ####
+    # Getting inverse of covariance matrices ####
+    omega <- invert(as.matrix(model_unstructured$naiv.var), tol = tol)
+  } else if (type == "model-based") {
+    # Inverse of model-based covariance under working correlation ####
     omega <- invert(object$naiv.var, tol = tol)
-
-    ## Robust covariance given working correlation structure ####
-    vr <- object$var
-
-    # Calculating mCIC ####
-    measure <- sum(diag(x = crossprod(x = omega, y = vr)))
   } else {
     stop("type specified does not allow calculation of mCIC")
   }
+
+  # Obtaining the robust covariance matrix ####
+  vr <- object$var
+
+  # Calculating the measure ####
+  measure <- sum(diag(x = crossprod(x = omega, y = vr)))
 
   # Returning mCIC
   return(measure)
