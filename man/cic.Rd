@@ -48,7 +48,7 @@ fit <- geeM::geem(
   id = id, data = ohio, family = stats::binomial(link = "logit"),
   corstr = "exchangeable"
 )
-geeM::vic(fit)
+geeM::cic(fit)
 
 }
 \references{

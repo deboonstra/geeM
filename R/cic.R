@@ -45,7 +45,7 @@
 #'   id = id, data = ohio, family = stats::binomial(link = "logit"),
 #'   corstr = "exchangeable"
 #' )
-#' geeM::vic(fit)
+#' geeM::cic(fit)
 #'
 #' @export
 cic <- function(object, tol = .Machine$double.eps, envir = parent.frame()) {
