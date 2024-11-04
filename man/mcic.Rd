@@ -4,20 +4,10 @@
 \alias{mcic}
 \title{Modified correlation information criteria}
 \usage{
-mcic(
-  object,
-  type = "unstructured",
-  tol = .Machine$double.eps,
-  envir = parent.frame()
-)
+mcic(object, tol = .Machine$double.eps, envir = parent.frame())
 }
 \arguments{
 \item{object}{An object of class \code{"geem"} representing the fit.}
-
-\item{type}{How mCIC is calculated by using either the model-based covariance
-matrix produced by the "unstructured" working correlation structure or the
-"model-based" covariance matrix produced by the working correlation
-structure.}
 
 \item{tol}{A numeric value specifying the tolerance when calculating the
 inverse of the model-based covariance matrix.
@@ -34,8 +24,9 @@ Calculating the modified correlation information criteria (mCIC)
 based on Boonstra and Cavanaugh (in works).
 }
 \details{
-(Out-dated) mCIC is calculated based on the trace of the product of
-model-based covariance matrices, where the referent variances are produced
+mCIC is calculated based on the trace of the product of
+robust covariance matrices produced from the fitted model and a model-based
+referent covariance matrix, where the referent covariances are produced
 by the model using the unstructured (i.e., general) correlation structure.
 }
 \examples{
