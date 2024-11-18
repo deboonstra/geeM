@@ -4,12 +4,16 @@
 \alias{vic}
 \title{Variance information criteria}
 \usage{
-vic(object, envir = parent.frame())
+vic(object, robust = FALSE, envir = parent.frame())
 }
 \arguments{
 \item{object}{An object of class \code{"geem"} representing the fit.}
 
-\item{envir}{An environment object to which find the \code{"geem"} object.}
+\item{robust}{A logical denoting whether the robust covariance matrices
+should be used. Default is \code{FALSE}.}
+
+\item{envir}{An environment object to which find the \code{"geem"} object.
+Default is \code{parent.frame()}.}
 }
 \value{
 A numeric vector containing the VIC value for the \code{"geem"}
@@ -20,9 +24,14 @@ Calculating the variance information criteria (VIC) based on
 Boonstra and Cavanaugh (in works).
 }
 \details{
-VIC is calculated based on the sum of the maximum of model-based
-variance ratios, where the referent variances are produced by the model using
+VIC is calculated based on the sum of the maximum of variance
+ratios, where the referent variances are produced by the model using
 the unstructured (i.e., general) correlation structure.
+
+When the robust covariance matrices are used through VIC may be affected
+by the variability and efficiency, while VIC based on the model-based
+covariance matrices may be affected by bias. \emph{In the future, other robust
+covariance estimators may be used.}
 }
 \examples{
 data(ohio, package = "geepack")

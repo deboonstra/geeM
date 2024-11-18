@@ -3,11 +3,19 @@
 #' Boonstra and Cavanaugh (in works).
 #'
 #' @param object An object of class \code{"geem"} representing the fit.
-#' @param envir An environment object to which find the \code{"geem"} object.
+#' @param robust A logical denoting whether the robust covariance matrices
+#' should be used. Default is `FALSE`.
+#' @param envir An environment object to which find the `"geem"` object.
+#' Default is `parent.frame()`.
 #'
-#' @details VIC is calculated based on the sum of the maximum of model-based
-#' variance ratios, where the referent variances are produced by the model using
+#' @details VIC is calculated based on the sum of the maximum of variance
+#' ratios, where the referent variances are produced by the model using
 #' the unstructured (i.e., general) correlation structure.
+#'
+#' When the robust covariance matrices are used through VIC may be affected
+#' by the variability and efficiency, while VIC based on the model-based
+#' covariance matrices may be affected by bias. *In the future, other robust
+#' covariance estimators may be used.*
 #'
 #' @return A numeric vector containing the VIC value for the \code{"geem"}
 #' object under consideration.
@@ -22,10 +30,13 @@
 #' geeM::vic(fit)
 #'
 #' @export
-vic <- function(object, envir = parent.frame()) {
+vic <- function(object, robust = FALSE, envir = parent.frame()) {
   # Checking function parameter types ####
   if (!methods::is(object, "geem")) {
     stop("object must be an object produced by geeM::geem")
+  }
+  if (!is.logical(robust)) {
+    stop("robust must a be a logical.")
   }
   if (!is.environment(envir)) {
     stop("envir must be an environment object")
@@ -64,15 +75,23 @@ vic <- function(object, envir = parent.frame()) {
   # Calculating VIC ####
   ## Getting covariance matrices ####
 
-  ### Model-based covariance under unstructured ####
-  mb_unstructured <- model_unstructured$naiv.var
+  ### Covariance under unstructured ####
+  if (robust) {
+    cov_unstructured <- model_unstructured$var
+  } else {
+    cov_unstructured <- model_unstructured$naiv.var
+  }
 
-  ### Model-based covariance under fitted model ####
-  mb_object <- object$naiv.var
+  ### Covariance under fitted model ####
+  if (robust) {
+    cov_object <- object$var
+  } else {
+    cov_object <- object$naiv.var
+  }
 
   ## Calculation ratio of variances ####
-  ratio1 <- diag(mb_unstructured) / diag(mb_object)
-  ratio2 <- diag(mb_object) / diag(mb_unstructured)
+  ratio1 <- diag(cov_unstructured) / diag(cov_object)
+  ratio2 <- diag(cov_object) / diag(cov_unstructured)
 
   ## Checking ratios ####
   ## Error if the covariance matrices are non-p.d.
