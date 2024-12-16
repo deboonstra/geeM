@@ -82,6 +82,11 @@ mcic <- function(
   # Calculating the measure ####
   measure <- sum(diag(x = crossprod(x = omega, y = vr)))
 
+  ## Reporting missing if below zero ####
+  if (measure < 0) {
+    measure <- NA
+  }
+
   # Returning mCIC
   return(measure)
 }
